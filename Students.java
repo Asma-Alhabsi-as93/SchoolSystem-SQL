@@ -4,6 +4,7 @@ package schoolSql;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -57,6 +58,7 @@ public class Students {
 		String username = "root";
 		String password = "root";
 		// Scanner sc = new Scanner(System.in);
+		
 		 String sub = "CREATE TABLE Subject " 
 		 + "(id INTEGER not NULL, " 
 		 + " title  varchar(8),"
@@ -84,45 +86,136 @@ public class Students {
 		
 	}
 	public static void topten() {
-		String sql="SELECT * FROM Students ORDER BY id LIMIT 100;";
-	}
-	public static void topFifteen() {
-		String sql="SELECT * FROM Subject ORDER BY id LIMIT 15;";
+		String url = "jdbc:mysql://localhost:3306/SchoolMgt";
+		//String url = "jdbc:mysql://localhost:3306/stu_sql";
+		String username = "root";
+		String password = "root";
+		String tenl="SELECT * FROM Students ORDER BY id LIMIT 10;";
+		Connection conn = null;
+		try {
+			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+			DriverManager.registerDriver(driver);
+			conn = DriverManager.getConnection(url,username, password);
+			Statement st = conn.createStatement();
+			ResultSet m = st.executeQuery(tenl);
+			 while(m.next()){
+		            //Display values
+		            System.out.print("ID: " + m.getInt("id"));
+		            System.out.print(", FirstName: " + m.getString("fname"));
+		            System.out.print(", LastName: " + m.getString("lname"));
+		            System.out.println(", BirthDate: " + m.getString("birthdate"));
+			 }
+			
+			conn.close();
+		}
+		catch (Exception ex) {
+			System.err.println(ex);
+		}
+		
 	}
 	
-	public static void addNewStudent() {
-		String url = "jdbc:mysql://localhost:3306/SchoolMgt";
-		//String url = "jdbc:mysql://localhost:3306/stu_sql";
-		String username = "root";
-		String password = "root";
-		 try(Connection conn = DriverManager.getConnection( url, username, password );
-		         Statement stmt = conn.createStatement();
-		      ) {		      
-			 String sql = "CREATE DATABASE STUDENTS";
-	         stmt.executeUpdate(sql);
-	         System.out.println("Database created successfully...");   	  
-	      } catch (SQLException e) {
-	         e.printStackTrace();
-	      }
-	      } 
-	public static void addNewSubject() {
-		String url = "jdbc:mysql://localhost:3306/SchoolMgt";
-		//String url = "jdbc:mysql://localhost:3306/stu_sql";
-		String username = "root";
-		String password = "root";
-		 try(Connection conn = DriverManager.getConnection( url, username, password );
-		         Statement stmt = conn.createStatement();
-		      ) {		      
-		         // Execute a query
-		         System.out.println("Inserting records into the table...");          
-		         String sql = "INSERT INTO Registration VALUES (1, 'java', 'Ali', 20)";
-		         stmt.executeUpdate(sql);
-		         stmt.executeUpdate(sql);
-		         System.out.println("Inserted records into the table...");   	  
-		      } catch (SQLException e) {
-		         e.printStackTrace();
-		      } 
+	public static void top15() {
+	String url = "jdbc:mysql://localhost:3306/SchoolMgt";
+	//String url = "jdbc:mysql://localhost:3306/stu_sql";
+	String username = "root";
+	String password = "root";
+	String tenl="SELECT * FROM Students ORDER BY id LIMIT 15;";
+	Connection conn = null;
+	try {
+		Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+		DriverManager.registerDriver(driver);
+		conn = DriverManager.getConnection(url,username, password);
+		Statement st = conn.createStatement();
+		ResultSet m = st.executeQuery(tenl);
+		 while(m.next()){
+	            //Display values
+	            System.out.print("ID: " + m.getInt("id"));
+	            System.out.print(", FirstName: " + m.getString("fname"));
+	            System.out.print(", LastName: " + m.getString("lname"));
+	            System.out.println(", BirthDate: " + m.getString("birthdate"));
+		 }
+		
+		conn.close();
 	}
+	catch (Exception ex) {
+		System.err.println(ex);
+	}
+	
+}
+	public static void addNewStudent() throws SQLException {
+		String url = "jdbc:mysql://localhost:3306/SchoolMgt";
+		//String url = "jdbc:mysql://localhost:3306/stu_sql";
+		String username = "root";
+		String password = "root";
+		 try(Connection conn = DriverManager.getConnection( url, username, password );
+		         Statement stmt = conn.createStatement();
+		      ) {	
+			 Scanner scanner = new Scanner(System.in);
+
+			 
+			 System.out.println("enter ID no");
+		        Integer id = scanner.nextInt();
+		        
+		        
+		        System.out.println("enter First name");
+		        String fName = scanner.next();
+		        System.out.println("enter Last name");
+		        String lName = scanner.next();
+		        
+
+		        System.out.println("enter Birthdate");
+		        String bDay = scanner.next();
+		        
+		        
+			 String sql = "INSERT INTO STUDENTS VALUES (" + id + ",'"+fName+"','" + lName+"','"+bDay+"')";
+	       
+	         int m = stmt.executeUpdate(sql);
+	            if (m >=  1) 
+	                System.out.println(
+	                        "inserted successfully : " + sql);
+	            else 
+	                System.out.println("insertion failed");
+	                
+	            
+	      } 
+		 }
+	public static void addNewSubject() throws SQLException {
+		String url = "jdbc:mysql://localhost:3306/SchoolMgt";
+		//String url = "jdbc:mysql://localhost:3306/stu_sql";
+		String username = "root";
+		String password = "root";
+		 try(Connection conn = DriverManager.getConnection( url, username, password );
+		         Statement stmt1 = conn.createStatement();
+		      ) {	
+			 Scanner scanner = new Scanner(System.in);
+
+			 
+			 System.out.println("enter ID no");
+		        Integer id = scanner.nextInt();
+		        
+		        
+		        System.out.println("enter Titel");
+		        String title = scanner.next();
+		        System.out.println("enter descc name");
+		        String descc = scanner.next();
+		        
+
+		        System.out.println("enter price pre student");
+		        String pPS = scanner.next();
+		        
+		        
+			 String sql = "INSERT INTO STUDENTS VALUES (" + id + ",'"+title+"','" + descc+"','"+pPS+"')";
+	       
+	         int m = stmt1.executeUpdate(sql);
+	            if (m >=  1) 
+	                System.out.println(
+	                        "inserted successfully : " + sql);
+	            else 
+	                System.out.println("insertion failed");
+	                
+	            
+	      } 
+		 }
 	
 	public static void exit() {
 		System.out.println("**************");
@@ -130,7 +223,7 @@ public class Students {
 		System.exit (0);
 		System.out.println("**************");
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		 Scanner sc = new Scanner(System.in);
 		 boolean hasExit=true;
@@ -149,10 +242,10 @@ public class Students {
 		 addingSubjectTable();
 		 break;
 			case 3:
-		 topten();
+				topten();
 		 break;
 			case 4:
-		 topFifteen();
+				top15();
 		 break;
 			case 5:
 				addNewStudent();
